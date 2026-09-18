@@ -38,7 +38,10 @@ function extractImagePayload(input: string): { mimeType: string; data: string } 
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  // Support dynamic port assignment on Google Cloud Run (defaults to 3000 for local development)
+  // In AI Studio sandbox development, Nginx reverse-proxies port 8080 to 3000, while Cloud Run expects process.env.PORT in production.
+  const isAiStudioDev = process.env.NODE_ENV !== "production" && process.env.APPLET_ID !== undefined;
+  const PORT = !isAiStudioDev && process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
   // Support image payloads up to 25MB for screen captures
   app.use(express.json({ limit: "25mb" }));
@@ -208,8 +211,19 @@ Return a JSON object with:
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  const server = app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
+  });
+
+  server.on("error", (err: any) => {
+    if (err.code === "EADDRINUSE" && PORT !== 3000) {
+      console.warn(`Port ${PORT} in use, falling back to port 3000 for dev proxy compatibility`);
+      app.listen(3000, "0.0.0.0", () => {
+        console.log("Server running on http://0.0.0.0:3000");
+      });
+    } else {
+      console.error("Server listen error:", err);
+    }
   });
 }
 

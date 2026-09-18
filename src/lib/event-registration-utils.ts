@@ -76,9 +76,7 @@ export const useEventData = () => {
           setLoading(false);
         },
         (error) => {
-          if (auth.currentUser) {
-            handleFirestoreError(error, OperationType.LIST, "event_participants_public");
-          }
+          console.error("Error listening to event participants:", error);
           setLoading(false);
         }
       );
@@ -92,15 +90,13 @@ export const useEventData = () => {
           setLoading(false);
         },
         (error) => {
-          if (auth.currentUser) {
-            handleFirestoreError(error, OperationType.LIST, "completions");
-          }
+          console.error("Error listening to completions:", error);
           setLoading(false);
         }
       );
 
       // 3. Quiz scores - restrict reader query to current user isOwner rules, unless they are admin
-      const isAdminUser = user.email === "arcadeabhi6@gmail.com";
+      const isAdminUser = user.email === "arcadeabhi6@gmail.com" || user.email === "abhijithnair0310@gmail.com";
       const qQuiz = isAdminUser
         ? collection(db, "quiz_attempts")
         : query(collection(db, "quiz_attempts"), where("userId", "==", user.uid));
@@ -118,9 +114,7 @@ export const useEventData = () => {
           setLoading(false);
         },
         (error) => {
-          if (auth.currentUser) {
-            handleFirestoreError(error, OperationType.LIST, "quiz_attempts");
-          }
+          console.error("Error listening to quiz attempts:", error);
           setLoading(false);
         }
       );

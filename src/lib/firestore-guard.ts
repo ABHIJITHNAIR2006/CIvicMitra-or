@@ -105,13 +105,14 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
   };
 
   // Ensure errInfo is serializable
+  let serialized = "";
   try {
-    const serialized = JSON.stringify(cleanObject(errInfo));
-    console.error('Firestore Error: ', serialized);
-    throw new Error(serialized);
+    serialized = JSON.stringify(cleanObject(errInfo));
   } catch (stringifyError) {
     const fallbackMessage = `Firestore Permission Denied at ${path || 'unknown'}`;
-    console.error(fallbackMessage, errorMessage);
-    throw new Error(JSON.stringify({ error: fallbackMessage, originalError: errorMessage }));
+    serialized = JSON.stringify({ error: fallbackMessage, originalError: errorMessage });
   }
+
+  console.error('Firestore Error: ', serialized);
+  throw new Error(serialized);
 }

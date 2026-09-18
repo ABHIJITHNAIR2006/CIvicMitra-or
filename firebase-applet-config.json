@@ -1,10 +1,12 @@
 {
   "projectId": "civicmitra-or",
-  "appId": "1:738064386470:web:e410b3a78aaae6f79be767",
+  "appId": "1:738064386470:web:77bf10e80e6501ff9be767",
   "apiKey": "AIzaSyCPm6Jvmc-Pd1g-ZW03nj1OCTbtsb4beq4",
   "authDomain": "civicmitra-or.firebaseapp.com",
   "firestoreDatabaseId": "(default)",
   "storageBucket": "civicmitra-or.firebasestorage.app",
   "messagingSenderId": "738064386470",
-  "measurementId": "G-JEM796TGPJ"
+  "measurementId": "",
+  "oAuthClientId": "738064386470-ra2l75j6kpqtqsqu8tktpk1jnecrfjd5.apps.googleusercontent.com",
+  "recaptchaSiteKey": ""
 }
